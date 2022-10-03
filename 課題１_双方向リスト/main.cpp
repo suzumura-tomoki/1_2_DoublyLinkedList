@@ -4,12 +4,12 @@
 void Uninit(DoublyLinkedList::Element* pTop);
 
 int main() {
-	DoublyLinkedList::Element top;
-	DoublyLinkedList::Element* pCurrentElement = &top;
+	DoublyLinkedList::Element* pTop = new DoublyLinkedList::Element;
+	DoublyLinkedList::Element* pCurrentElement = pTop;
 	const size_t ELEMENT_SIZE = sizeof(DoublyLinkedList::Element);
 
-	top.pPrevious = nullptr;
-	top.pNext = nullptr;
+	pTop->pPrevious = nullptr;
+	pTop->pNext = nullptr;
 
 	std::ifstream ifsScoreFile;
 	ifsScoreFile.open("Scores.txt");
@@ -21,19 +21,16 @@ int main() {
 	}
 
 	//スコア読み込み
-	while (true)
+	while (ifsScoreFile.eof() == false)
 	{
 		//１行読み取り
 		std::getline(ifsScoreFile, pCurrentElement->score);
 
-		if (ifsScoreFile.eof())
-			break;
-
 		//新しい要素の確保
-		pCurrentElement->pNext = new DoublyLinkedList::Element;//static_cast<DoublyLinkedList::Element*>(malloc(ELEMENT_SIZE));
+		pCurrentElement->pNext = new DoublyLinkedList::Element;
 		if (pCurrentElement->pNext == nullptr) {
 			printf("メモリ確保に失敗");
-			Uninit(&top);
+			Uninit(pTop);
 			return 1;
 		}
 		pCurrentElement->pNext->pPrevious = pCurrentElement;
@@ -45,7 +42,7 @@ int main() {
 	ifsScoreFile.close();
 
 	//読み込んだ値を出力
-	pCurrentElement = &top;
+	pCurrentElement = pTop;
 
 	while (pCurrentElement != nullptr) {
 		printf(pCurrentElement->score.c_str());
@@ -56,12 +53,12 @@ int main() {
 
 	printf("\nENTERキーを押すと終了します");
 	getchar();
-	Uninit(&top);
+	Uninit(pTop);
 	return 0;
 }
 
 void Uninit(DoublyLinkedList::Element* pTop) {
-	DoublyLinkedList::Element* pCurrent=pTop->pNext;
+	DoublyLinkedList::Element* pCurrent = pTop;
 	DoublyLinkedList::Element* pWork;
 
 	while (pCurrent != nullptr)
