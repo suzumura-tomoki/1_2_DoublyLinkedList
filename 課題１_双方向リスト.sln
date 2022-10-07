@@ -5,7 +5,7 @@ VisualStudioVersion = 17.3.32922.545
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "課題１_双方向リスト", "課題１_双方向リスト\課題１_双方向リスト.vcxproj", "{5FDFB2F2-0789-49AC-9C15-C878649821F1}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestForListClass", "TestForListClass\TestForListClass.vcxproj", "{DA7B5A7A-5AF5-4F72-90B0-E5C2F64018F9}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestForList", "TestForList\TestForList.vcxproj", "{DA7B5A7A-5AF5-4F72-90B0-E5C2F64018F9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

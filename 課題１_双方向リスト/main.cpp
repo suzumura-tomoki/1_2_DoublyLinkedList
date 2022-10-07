@@ -18,9 +18,36 @@ int main() {
 	while (ifsScoreFile.eof() == false)
 	{
 		list.AddNode(iterator);
+
 		//ファイルの読み取り
-		std::getline(ifsScoreFile, (*iterator).resultData.score, ' ');
-		std::getline(ifsScoreFile, (*iterator).resultData.name, '\n');//'\n'は省略可
+		char readCharacter;
+		while (true)
+		{
+			ifsScoreFile.get(readCharacter);
+
+			if (ifsScoreFile.eof())
+				break;
+
+			iterator->score += readCharacter;
+
+			if (readCharacter == ' ')
+				break;
+			if (readCharacter == '　')
+				break;
+		}
+
+		while (true)
+		{
+			ifsScoreFile.get(readCharacter);
+
+			if (ifsScoreFile.eof())
+				break;
+
+			iterator->name += readCharacter;
+
+			if (readCharacter == '\n')
+				break;
+		}
 
 		iterator++;
 	}
@@ -29,8 +56,8 @@ int main() {
 
 	//読み込んだ値を出力
 	for (iterator = list.GetBegin(); iterator != list.GetEnd(); iterator++) {
-		printf((*iterator).resultData.score.c_str());
-		printf((*iterator).resultData.name.c_str());
+		printf(iterator->score.c_str());
+		printf(iterator->name.c_str());
 		printf("\n");
 	}
 
