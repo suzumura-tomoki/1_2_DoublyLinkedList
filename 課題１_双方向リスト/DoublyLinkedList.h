@@ -14,6 +14,9 @@ public:
 class DoublyLinkedList
 {
 public:
+	//前方宣言
+	class Iterator;
+
 	// @brief 双方向リストのノード
 	// @brief 構造体ResultDataを格納している
 	struct Node {
@@ -27,19 +30,26 @@ public:
 	class ConstIterator {
 		friend DoublyLinkedList;
 	public:
-		//コンストラクタ
+		// @brief コンストラクタ
 		ConstIterator();
+		// @brief コンストラクタ
 		ConstIterator(const DoublyLinkedList* _pList, const Node* _pNode);
+
+		// @brief コピーコンストラクタ
+		ConstIterator(const ConstIterator& obj);
+
+		// @brief デストラクタ
+		virtual ~ConstIterator();
 
 		// @brief 次の要素に移動します
 		//        次の要素に移動したイテレータを返します
-		ConstIterator operator++();
+		ConstIterator& operator++();
 		// @brief 次の要素に移動します
 		//        次の要素に移動していないイテレータを返します
 		ConstIterator operator++(int);
 		// @brief 前の要素に移動します
 		//        前の要素に移動したイテレータを返します
-		ConstIterator operator--();
+		ConstIterator& operator--();
 		// @brief 前の要素します
 		//        前の要素に移動していないイテレータを返します
 		ConstIterator operator--(int);
@@ -50,20 +60,21 @@ public:
 		ConstIterator operator-(int n);
 
 		// @brief イテレータが示すコンスト要素の参照を取得します
-		const ResultData& operator*();
+		const ResultData& operator*()const;
 		// @brief イテレータが示すコンスト要素の参照を取得します
-		const ResultData* operator->();//何故かポインタを返さないといけない
-		// @brief コピーコンストラクタ
-		ConstIterator(const ConstIterator& obj);
+		const ResultData* operator->()const;//何故かポインタを返さないといけない
 		
 		// @brief イテレータを比較します
-		bool operator==(ConstIterator it);
-		bool operator!=(ConstIterator it);
+		bool operator==(const ConstIterator& it)const;
+		bool operator!=(const ConstIterator& it)const;
 
-		// @brief イテレータが参照するリストの参照を取得します
-		const DoublyLinkedList& GetList();
+		// @brief イテレータの比較
+		//		  示しているノードが同じものか比較します
+		bool operator==(const Iterator& it)const;
+		// @brief イテレータの比較
+		//		  示しているノードが異なるものか比較します
+		bool operator!=(const Iterator& it)const;
 
-		//bool IsDummy();
 
 	protected:
 		Node* pNode = nullptr;
@@ -76,18 +87,26 @@ public:
 	// @brief *演算子でイテレータが示すデータにアクセスできる
 	class Iterator :public ConstIterator {
 	public:
+		// @brief コンストラクタ
 		Iterator();
+		// @brief コンストラクタ
 		Iterator(DoublyLinkedList* _pList, Node* _pNode);
 		
+		// @brief コピーコンストラクタ
+		Iterator(const Iterator& obj) = default;
+
+		// @brief デストラクタ
+		virtual ~Iterator();
+
 		// @brief 次の要素に移動します
 		//        次の要素に移動したイテレータを返します
-		Iterator operator++();
+		Iterator& operator++();
 		// @brief 次の要素に移動します
 		//        次の要素に移動していないイテレータを返します
 		Iterator operator++(int);
 		// @brief 前の要素に移動します
 		//        前の要素に移動したイテレータを返します
-		Iterator operator--();
+		Iterator& operator--();
 		// @brief 前の要素します
 		//        前の要素に移動していないイテレータを返します
 		Iterator operator--(int);
@@ -96,10 +115,24 @@ public:
 		// @brief 先頭方向に指定した数だけ移動したイテレータを返します
 		Iterator operator-(int n);
 
+		// @brief イテレータの比較
+		//		  示しているノードが同じものか比較します
+		bool operator==(Iterator& it)const;
+		// @brief イテレータの比較
+		//		  示しているノードが異なるものか比較します
+		bool operator!=(Iterator& it)const;
+
+		// @brief イテレータの比較
+		//		  示しているノードが同じものか比較します
+		bool operator==(const ConstIterator& it)const;
+		// @brief イテレータの比較
+		//		  示しているノードが異なるものか比較します
+		bool operator!=(const ConstIterator& it)const;
+
 		// @brief イテレータが示す要素を取得します
 		ResultData& operator*();
 		// @brief イテレータが示すコンスト要素を取得します
-		ResultData* operator->();//何故かポインタを返さないといけない
+		ResultData* operator->();
 
 	private:
 		
@@ -107,22 +140,26 @@ public:
 
 	// @brief コンストラクタ
 	DoublyLinkedList();
+
+	// @brief コピーコンストラクタ
+	DoublyLinkedList(const DoublyLinkedList& obj) = default;
+
 	// @brief デストラクタ
-	~DoublyLinkedList();
+	virtual ~DoublyLinkedList();
 
 	// @brief 要素数を取得します
 	unsigned int GetSize()const;
 
 	// @brief イテレータが示す位置に要素を追加します
 	// @param[in,out] 追加位置のイテレータ
-	bool AddNode(ConstIterator& iterator);
+	bool Insert(ConstIterator& iterator, const ResultData& data);
 	// @brief イテレータが示す位置に要素を追加します
 	// @param[in,out] 追加位置のイテレータ
-	bool AddNode(Iterator& iterator);
+	bool Insert(Iterator& iterator, const ResultData& data);
 
 	// @brief イテレータが示す位置の要素を削除します
 	// @param[in,out] 削除位置のイテレータ
-	bool DeleteNode(ConstIterator& iterator);
+	bool Delete(ConstIterator& iterator);
 
 	// @brief 先頭のイテレータを取得
 	Iterator GetBegin();
