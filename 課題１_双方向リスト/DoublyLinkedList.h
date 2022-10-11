@@ -9,8 +9,8 @@ public:
 	std::string name;
 };
 
-// @brief 双方向リストのクラス
-// @brief 別名bi-directional list
+// @brief 双方向リストのクラス\n
+// 別名bi-directional list
 class DoublyLinkedList
 {
 public:
@@ -25,17 +25,20 @@ public:
 		ResultData resultData;
 	};
 
-	// @brief 双方向リストのイテレータ
-	// @brief *演算子でイテレータが示すデータにアクセスできます
+	// @brief 双方向リストのイテレータ\n
+	//		  ＊演算子または->演算子でデータにアクセスできます
 	class ConstIterator {
 		friend DoublyLinkedList;
 	public:
 		// @brief コンストラクタ
 		ConstIterator();
 		// @brief コンストラクタ
+		// @param[in] const DoublyLinkedList*
+		// @param[in] const Node*
 		ConstIterator(const DoublyLinkedList* _pList, const Node* _pNode);
 
 		// @brief コピーコンストラクタ
+		// @param[in] const ConstIterator&
 		ConstIterator(const ConstIterator& obj);
 
 		// @brief デストラクタ
@@ -55,8 +58,10 @@ public:
 		ConstIterator operator--(int);
 
 		// @brief 末尾方向に指定した数だけ移動したコンストイテレータを返します
+		// @param[in] int
 		ConstIterator operator+(int n);
 		// @brief 先頭方向に指定した数だけ移動したコンストイテレータを返します
+		// @param[in] int
 		ConstIterator operator-(int n);
 
 		// @brief イテレータが示すコンスト要素の参照を取得します
@@ -64,15 +69,18 @@ public:
 		// @brief イテレータが示すコンスト要素の参照を取得します
 		const ResultData* operator->()const;//何故かポインタを返さないといけない
 		
-		// @brief イテレータを比較します
+		// @brief 示しているノードが同じものか比較します
+		// @param[in] ConstIterator&
 		bool operator==(const ConstIterator& it)const;
+		// @brief 示しているノードが異なるものか比較します
+		// @param[in] ConstIterator&
 		bool operator!=(const ConstIterator& it)const;
 
-		// @brief イテレータの比較
-		//		  示しているノードが同じものか比較します
+		// @brief 示しているノードが同じものか比較します
+		// @param[in] Iterator&
 		bool operator==(const Iterator& it)const;
-		// @brief イテレータの比較
-		//		  示しているノードが異なるものか比較します
+		// @brief 示しているノードが異なるものか比較します
+		// @param[in] Iterator&
 		bool operator!=(const Iterator& it)const;
 
 
@@ -83,16 +91,19 @@ public:
 		
 	};
 
-	// @brief 双方向リストのコンストイテレータ
-	// @brief *演算子でイテレータが示すデータにアクセスできる
+	// @brief 双方向リストのコンストイテレータ\n
+	//		　＊演算子または->演算子でデータにアクセスできます
 	class Iterator :public ConstIterator {
 	public:
 		// @brief コンストラクタ
 		Iterator();
 		// @brief コンストラクタ
+		// @param[in] 参照するリスト
+		// @param[in] 示すノード
 		Iterator(DoublyLinkedList* _pList, Node* _pNode);
 		
 		// @brief コピーコンストラクタ
+		// @param[in] コピー元のオブジェクト
 		Iterator(const Iterator& obj) = default;
 
 		// @brief デストラクタ
@@ -110,23 +121,26 @@ public:
 		// @brief 前の要素します
 		//        前の要素に移動していないイテレータを返します
 		Iterator operator--(int);
+
 		// @brief 末尾方向に指定した数だけ移動したイテレータを返します
+		// @param[in] int
 		Iterator operator+(int n);
 		// @brief 先頭方向に指定した数だけ移動したイテレータを返します
+		// @param[in] int
 		Iterator operator-(int n);
 
-		// @brief イテレータの比較
-		//		  示しているノードが同じものか比較します
+		// @brief 示すノードが同じものか比較します
+		//　@param[in] Iterator&
 		bool operator==(Iterator& it)const;
-		// @brief イテレータの比較
-		//		  示しているノードが異なるものか比較します
+		// @brief 示すノードが異なるものか比較します
+		//　@param[in] Iterator&
 		bool operator!=(Iterator& it)const;
 
-		// @brief イテレータの比較
-		//		  示しているノードが同じものか比較します
+		// @brief 示すノードが同じものか比較します
+		//　@param[in] ConstIterator&
 		bool operator==(const ConstIterator& it)const;
-		// @brief イテレータの比較
-		//		  示しているノードが異なるものか比較します
+		// @brief 示すノードが異なるものか比較します
+		//　@param[in] ConstIterator&
 		bool operator!=(const ConstIterator& it)const;
 
 		// @brief イテレータが示す要素を取得します
@@ -152,9 +166,11 @@ public:
 
 	// @brief イテレータが示す位置に要素を追加します
 	// @param[in,out] 追加位置のイテレータ
+	// @param[in] 格納するデータ
 	bool Insert(ConstIterator& iterator, const ResultData& data);
 	// @brief イテレータが示す位置に要素を追加します
 	// @param[in,out] 追加位置のイテレータ
+	// @param[in] 格納するデータ
 	bool Insert(Iterator& iterator, const ResultData& data);
 
 	// @brief イテレータが示す位置の要素を削除します
