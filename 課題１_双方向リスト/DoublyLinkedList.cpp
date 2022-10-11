@@ -88,70 +88,6 @@ bool DoublyLinkedList::AddNode(Iterator& iterator)
 	return true;
 }
 
-bool DoublyLinkedList::AddNode(ConstIterator& iterator, int addNum)
-{
-	if (this != iterator.pList)
-		return false;
-
-	if (iterator.pNode == nullptr)
-		return false;
-
-	//追加する場所が先頭の場合、後で先頭ポインタを更新
-	bool addIsTop = iterator.pNode == pTop;
-
-	for (int i = 0; i < addNum; i++) {
-		Node* pNewNode = new Node;
-		pNewNode->pNext = iterator.pNode;//追加位置にあった要素を次の要素にする
-		pNewNode->pPrevious = iterator.pNode->pPrevious;//追加位置にあった要素の前要素を新しい要素の前要素にする
-
-		//前後の要素が新しい要素を参照するようにする
-		pNewNode->pNext->pPrevious = pNewNode;
-
-		if (pNewNode->pPrevious != nullptr)
-			pNewNode->pPrevious->pNext = pNewNode;
-
-		iterator--;//追加した要素へ移動
-		size++;
-	}
-
-	if (addIsTop)
-		pTop = iterator.pNode;
-
-	return true;
-}
-
-bool DoublyLinkedList::AddNode(Iterator& iterator, int addNum)
-{
-	if (this != iterator.pList)
-		return false;
-
-	if (iterator.pNode == nullptr)
-		return false;
-
-	//追加する場所が先頭の場合、後で先頭ポインタを更新
-	bool addIsTop = iterator.pNode == pTop;
-
-	for (int i = 0; i < addNum; i++) {
-		Node* pNewNode = new Node;
-		pNewNode->pNext = iterator.pNode;//追加位置にあった要素を次の要素にする
-		pNewNode->pPrevious = iterator.pNode->pPrevious;//追加位置にあった要素の前要素を新しい要素の前要素にする
-
-		//前後の要素が新しい要素を参照するようにする
-		pNewNode->pNext->pPrevious = pNewNode;
-
-		if (pNewNode->pPrevious != nullptr)
-			pNewNode->pPrevious->pNext = pNewNode;
-
-		iterator--;//追加した要素へ移動
-		size++;
-	}
-
-	if (addIsTop)
-		pTop = iterator.pNode;
-
-	return true;
-}
-
 bool DoublyLinkedList::DeleteNode(ConstIterator& iterator)
 {
 	// イテレータが自分のリストのイテレータか判断する
@@ -233,7 +169,7 @@ DoublyLinkedList::ConstIterator DoublyLinkedList::ConstIterator::operator++()
 	return *this;
 }
 
-DoublyLinkedList::ConstIterator DoublyLinkedList::ConstIterator::operator++(int n)
+DoublyLinkedList::ConstIterator DoublyLinkedList::ConstIterator::operator++(int)
 {
 	assert(this->pList != nullptr);//リストの参照がない
 	assert(this->pNode != &this->pList->dummy);//末尾ノードである
@@ -251,7 +187,7 @@ DoublyLinkedList::ConstIterator DoublyLinkedList::ConstIterator::operator--()
 	return *this;
 }
 
-DoublyLinkedList::ConstIterator DoublyLinkedList::ConstIterator::operator--(int n)
+DoublyLinkedList::ConstIterator DoublyLinkedList::ConstIterator::operator--(int)
 {
 	assert(this->pList != nullptr);//リストの参照がない
 	assert(this->pNode->pPrevious != nullptr);//先頭ノードである　またはリストが空の時の末尾ノード
@@ -262,32 +198,74 @@ DoublyLinkedList::ConstIterator DoublyLinkedList::ConstIterator::operator--(int 
 
 DoublyLinkedList::ConstIterator DoublyLinkedList::ConstIterator::operator+(int n)
 {
+	assert(this->pList != nullptr);//リストの参照がない場合
+
 	Node* pMoved = pNode;
 
-	for (int i = 0; i < n; i++) {
+	if (n >= 0) {
 
-		if (pMoved->pNext == nullptr)
-			return ConstIterator(pList, pMoved);
+		//末尾に進む
+		for (int i = 0; i < n; i++) {
 
-		pMoved = pMoved->pNext;
+			//末尾を越えないように停止する
+			if (pMoved->pNext == nullptr)
+				return ConstIterator(pList, pMoved);
+
+			pMoved = pMoved->pNext;//(*this)++よりオーバーヘッドが少ない？
+		}
+
+		return ConstIterator(pList, pMoved);
 	}
+	else {
 
-	return ConstIterator(pList, pMoved);
+		//先頭に進む
+		for (int i = 0; i > n; i--) {
+
+			//先頭を越えないように停止する
+			if (pMoved->pPrevious == nullptr)
+				return ConstIterator(pList, pMoved);
+
+			pMoved = pMoved->pPrevious;//(*this)--よりオーバーヘッドが少ない？
+		}
+
+		return ConstIterator(pList, pMoved);
+	}
 }
 
 DoublyLinkedList::ConstIterator DoublyLinkedList::ConstIterator::operator-(int n)
 {
+	assert(this->pList != nullptr);//リストの参照がない場合
+
 	Node* pMoved = pNode;
 
-	for (int i = 0; i < n; i++) {
+	if (n >= 0) {
 
-		if (pMoved->pPrevious == nullptr)
-			return ConstIterator(pList, pMoved);
+		//先頭に進む
+		for (int i = 0; i < n; i++) {
 
-		pMoved = pMoved->pPrevious;
+			//先頭を越えないように停止する
+			if (pMoved->pPrevious == nullptr)
+				return ConstIterator(pList, pMoved);
+
+			pMoved = pMoved->pPrevious;//(*this)--よりオーバーヘッドが少ない？
+		}
+
+		return ConstIterator(pList, pMoved);
 	}
+	else {
 
-	return ConstIterator(pList, pMoved);
+		//末尾に進む
+		for (int i = 0; i > n; i--) {
+
+			//末尾を越えないように停止する
+			if (pMoved->pNext == nullptr)
+				return ConstIterator(pList, pMoved);
+
+			pMoved = pMoved->pNext;//(*this)++よりオーバーヘッドが少ない？
+		}
+
+		return ConstIterator(pList, pMoved);
+	}
 }
 
 const ResultData& DoublyLinkedList::ConstIterator::operator*()
@@ -297,6 +275,9 @@ const ResultData& DoublyLinkedList::ConstIterator::operator*()
 
 const ResultData* DoublyLinkedList::ConstIterator::operator->()
 {
+	assert(pList != nullptr);//pListがnullptrでないこと
+	assert(pNode != &pList->dummy);//pNodeがダミーでないこと
+
 	return &pNode->resultData;
 }
 
@@ -322,10 +303,10 @@ const DoublyLinkedList& DoublyLinkedList::ConstIterator::GetList()
 	return *pList;//const_castしなくていい？
 }
 
-bool DoublyLinkedList::ConstIterator::IsDummy()
-{
-	return this->pNode == &pList->dummy;
-}
+//bool DoublyLinkedList::ConstIterator::IsDummy()
+//{
+//	return this->pNode == &pList->dummy;
+//}
 
 
 DoublyLinkedList::Iterator::Iterator()
@@ -339,34 +320,115 @@ DoublyLinkedList::Iterator::Iterator(DoublyLinkedList* _pList, Node* _pNode) : C
 	//ここでは何もしない
 }
 
+DoublyLinkedList::Iterator DoublyLinkedList::Iterator::operator++()
+{
+	assert(this->pList != nullptr);//リストの参照がない
+	assert(this->pNode != &this->pList->dummy);//末尾ノードである
+
+	pNode = pNode->pNext;
+	return *this;
+}
+
+DoublyLinkedList::Iterator DoublyLinkedList::Iterator::operator++(int)
+{
+	assert(this->pList != nullptr);//リストの参照がない
+	assert(this->pNode != &this->pList->dummy);//末尾ノードである
+
+	Iterator it = *this;
+	pNode = pNode->pNext;
+	return it;
+}
+
+DoublyLinkedList::Iterator DoublyLinkedList::Iterator::operator--()
+{
+	assert(this->pList != nullptr);//リストの参照がない
+	assert(this->pNode->pPrevious != nullptr);//先頭ノードである　またはリストが空の時の末尾ノード
+
+	pNode = pNode->pPrevious;
+	return *this;
+}
+
+DoublyLinkedList::Iterator DoublyLinkedList::Iterator::operator--(int)
+{
+	assert(this->pList != nullptr);//リストの参照がない
+	assert(this->pNode->pPrevious != nullptr);//先頭ノードである　またはリストが空の時の末尾ノード
+
+	Iterator it = *this;
+	pNode = pNode->pPrevious;
+	return it;
+}
+
 DoublyLinkedList::Iterator DoublyLinkedList::Iterator::operator+(int n)
 {
+	assert(this->pList != nullptr);//リストの参照がない場合
+
 	Node* pMoved = pNode;
 
-	for (int i = 0; i < n; i++) {
+	if (n >= 0) {
 
-		if (pMoved->pNext == nullptr)
-			return Iterator(pList, pMoved);
+		//末尾に進む
+		for (int i = 0; i < n; i++) {
 
-		pMoved = pMoved->pNext;
+			//末尾を越えないように停止する
+			if (pMoved->pNext == nullptr)
+				return Iterator(pList, pMoved);
+
+			pMoved = pMoved->pNext;//(*this)++よりオーバーヘッドが少ない？
+		}
+
+		return Iterator(pList, pMoved);
 	}
+	else {
 
-	return Iterator(pList, pMoved);
+		//先頭に進む
+		for (int i = 0; i > n; i--) {
+
+			//先頭を越えないように停止する
+			if (pMoved->pPrevious == nullptr)
+				return Iterator(pList, pMoved);
+
+			pMoved = pMoved->pPrevious;//(*this)--よりオーバーヘッドが少ない？
+		}
+
+		return Iterator(pList, pMoved);
+	}
 }
 
 DoublyLinkedList::Iterator DoublyLinkedList::Iterator::operator-(int n)
 {
+	assert(this->pList != nullptr);//リストの参照がない場合
+
 	Node* pMoved = pNode;
 
-	for (int i = 0; i < n; i++) {
+	if (n >= 0) {
 
-		if (pMoved->pPrevious == nullptr)
-			return Iterator(pList, pMoved);
+		//先頭に進む
+		for (int i = 0; i < n; i++) {
 
-		pMoved = pMoved->pPrevious;
+			//先頭を越えないように停止する
+			if (pMoved->pPrevious == nullptr)
+				return Iterator(pList, pMoved);
+
+			pMoved = pMoved->pPrevious;//(*this)--よりオーバーヘッドが少ない？
+		}
+
+		return Iterator(pList, pMoved);
+	}
+	else {
+
+		//末尾に進む
+		for (int i = 0; i > n; i--) {
+
+			//末尾を越えないように停止する
+			if (pMoved->pNext == nullptr)
+				return Iterator(pList, pMoved);
+
+			pMoved = pMoved->pNext;//(*this)++よりオーバーヘッドが少ない？
+		}
+
+		return Iterator(pList, pMoved);
 	}
 
-	return Iterator(pList, pMoved);
 }
 
 ResultData& DoublyLinkedList::Iterator::operator*()

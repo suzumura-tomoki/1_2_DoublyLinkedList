@@ -36,13 +36,13 @@ public:
 		ConstIterator operator++();
 		// @brief 次の要素に移動します
 		//        次の要素に移動していないイテレータを返します
-		ConstIterator operator++(int n);
+		ConstIterator operator++(int);
 		// @brief 前の要素に移動します
 		//        前の要素に移動したイテレータを返します
 		ConstIterator operator--();
 		// @brief 前の要素します
 		//        前の要素に移動していないイテレータを返します
-		ConstIterator operator--(int n);
+		ConstIterator operator--(int);
 
 		// @brief 末尾方向に指定した数だけ移動したコンストイテレータを返します
 		ConstIterator operator+(int n);
@@ -63,7 +63,7 @@ public:
 		// @brief イテレータが参照するリストの参照を取得します
 		const DoublyLinkedList& GetList();
 
-		bool IsDummy();
+		//bool IsDummy();
 
 	protected:
 		Node* pNode = nullptr;
@@ -79,6 +79,18 @@ public:
 		Iterator();
 		Iterator(DoublyLinkedList* _pList, Node* _pNode);
 		
+		// @brief 次の要素に移動します
+		//        次の要素に移動したイテレータを返します
+		Iterator operator++();
+		// @brief 次の要素に移動します
+		//        次の要素に移動していないイテレータを返します
+		Iterator operator++(int);
+		// @brief 前の要素に移動します
+		//        前の要素に移動したイテレータを返します
+		Iterator operator--();
+		// @brief 前の要素します
+		//        前の要素に移動していないイテレータを返します
+		Iterator operator--(int);
 		// @brief 末尾方向に指定した数だけ移動したイテレータを返します
 		Iterator operator+(int n);
 		// @brief 先頭方向に指定した数だけ移動したイテレータを返します
@@ -107,14 +119,6 @@ public:
 	// @brief イテレータが示す位置に要素を追加します
 	// @param[in,out] 追加位置のイテレータ
 	bool AddNode(Iterator& iterator);
-	// @brief イテレータが示す位置に要素を追加します
-	// @param[in,out] 追加位置のイテレータ
-	// @param[in] 追加するノードの数
-	bool AddNode(ConstIterator& iterator, int addNum);
-	// @brief イテレータが示す位置に要素を追加します
-	// @param[in,out] 追加位置のイテレータ
-	// @param[in] 追加するノードの数
-	bool AddNode(Iterator& iterator, int addNum);
 
 	// @brief イテレータが示す位置の要素を削除します
 	// @param[in,out] 削除位置のイテレータ

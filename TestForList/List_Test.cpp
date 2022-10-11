@@ -38,7 +38,7 @@ namespace ex01_DataStructure
 		{
 			DoublyLinkedList list;
 			DoublyLinkedList::Iterator it = list.GetEnd();
-			ASSERT_TRUE(list.AddNode(it, 1));
+			ASSERT_TRUE(list.AddNode(it));
 			EXPECT_EQ(1, list.GetSize());//intとunsigned int だが通る
 		}
 
@@ -70,7 +70,7 @@ namespace ex01_DataStructure
 		{
 			DoublyLinkedList list;
 			DoublyLinkedList::Iterator it = list.GetBegin();
-			ASSERT_TRUE(list.AddNode(it, 1));
+			ASSERT_TRUE(list.AddNode(it));
 			EXPECT_EQ(1, list.GetSize());
 		}
 
@@ -86,7 +86,7 @@ namespace ex01_DataStructure
 			DoublyLinkedList list;
 			DoublyLinkedList::Iterator it;
 
-			ASSERT_FALSE(list.AddNode(it, 1));
+			ASSERT_FALSE(list.AddNode(it));
 			EXPECT_EQ(0, list.GetSize());
 		}
 
@@ -101,7 +101,7 @@ namespace ex01_DataStructure
 		{
 			DoublyLinkedList list;
 			DoublyLinkedList::Iterator it = list.GetBegin();
-			list.AddNode(it, 1);
+			list.AddNode(it);
 			ASSERT_TRUE(list.DeleteNode(it));
 			EXPECT_EQ(0, list.GetSize());
 		}
@@ -117,7 +117,7 @@ namespace ex01_DataStructure
 		{
 			DoublyLinkedList list;
 			DoublyLinkedList::Iterator it = list.GetBegin();
-			list.AddNode(it, 1);
+			list.AddNode(it);
 			it++;//末尾ダミーのイテレータ
 			ASSERT_FALSE(list.DeleteNode(it));
 			EXPECT_EQ(1, list.GetSize());
@@ -163,13 +163,13 @@ namespace ex01_DataStructure
 			//先頭に追加
 			DoublyLinkedList list;
 			DoublyLinkedList::Iterator it = list.GetBegin();
-			EXPECT_TRUE(list.AddNode(it, 1));
+			EXPECT_TRUE(list.AddNode(it));
 			EXPECT_EQ(1, list.GetSize());
 
 			//末尾に追加
 			DoublyLinkedList list2;
 			it = list2.GetEnd();
-			EXPECT_TRUE(list2.AddNode(it, 1));
+			EXPECT_TRUE(list2.AddNode(it));
 			EXPECT_EQ(1, list2.GetSize());
 		}
 
@@ -185,12 +185,12 @@ namespace ex01_DataStructure
 			DoublyLinkedList list;
 			DoublyLinkedList::Iterator it = list.GetBegin();
 			//要素を追加しておく
-			list.AddNode(it, 1);
+			list.AddNode(it);
 			std::string str = "元々先頭の要素";
 			it->name = str;
 
 			//先頭に要素を追加
-			EXPECT_TRUE(list.AddNode(it, 1));
+			EXPECT_TRUE(list.AddNode(it));
 
 			//要素を確認
 			it++;//2番目の要素へ
@@ -209,13 +209,13 @@ namespace ex01_DataStructure
 			DoublyLinkedList list;
 			DoublyLinkedList::Iterator it = list.GetBegin();
 			//要素を追加しておく
-			list.AddNode(it, 1);
+			list.AddNode(it);
 			std::string str = "元々先頭の要素";
 			it->name = str;
 
 			//末尾に要素を追加
 			it = list.GetEnd();
-			EXPECT_TRUE(list.AddNode(it, 1));
+			EXPECT_TRUE(list.AddNode(it));
 
 			//要素を確認
 			it--;//1番目の要素へ
@@ -234,7 +234,8 @@ namespace ex01_DataStructure
 			DoublyLinkedList list;
 			DoublyLinkedList::Iterator it = list.GetBegin();
 			//要素を2つ用意する
-			list.AddNode(it, 2);
+			list.AddNode(it);
+			list.AddNode(it);
 
 			EXPECT_EQ(2, list.GetSize());
 
@@ -248,7 +249,7 @@ namespace ex01_DataStructure
 			it->name = str2;
 
 			//2番目に要素を追加
-			EXPECT_TRUE(list.AddNode(it, 1));
+			EXPECT_TRUE(list.AddNode(it));
 
 			//要素を確認
 			it--;//1番目の要素へ
@@ -270,13 +271,13 @@ namespace ex01_DataStructure
 			DoublyLinkedList::ConstIterator cit = list.GetConstBegin();
 
 			//要素を1つ用意
-			list.AddNode(cit, 1);
+			list.AddNode(cit);
 
 			const ResultData* pData = &*cit;
 			int listSize = list.GetSize();
 
 			//先頭に要素を追加
-			EXPECT_TRUE(list.AddNode(cit, 1));
+			EXPECT_TRUE(list.AddNode(cit));
 			EXPECT_EQ(++listSize, list.GetSize());//要素が増えていることを確認
 			EXPECT_EQ(pData, &*(cit + 1));//後ろにずれていることを確認
 
@@ -284,14 +285,14 @@ namespace ex01_DataStructure
 			//中央に要素を追加
 			cit++;
 			pData = &*cit;
-			EXPECT_TRUE(list.AddNode(cit, 1));
+			EXPECT_TRUE(list.AddNode(cit));
 			EXPECT_EQ(++listSize, list.GetSize());//要素が増えていることを確認
 			EXPECT_EQ(pData, &*(cit + 1));//後ろにずれていることを確認
 
 			//末尾に要素を追加
 			cit = list.GetConstEnd();
 			pData = &*cit;
-			EXPECT_TRUE(list.AddNode(cit, 1));
+			EXPECT_TRUE(list.AddNode(cit));
 			EXPECT_EQ(++listSize, list.GetSize());//要素が増えていることを確認
 			EXPECT_EQ(pData, &*(cit + 1));//後ろにずれていることを確認
 
@@ -310,11 +311,11 @@ namespace ex01_DataStructure
 			DoublyLinkedList::Iterator it;
 
 			//リストの参照がないイテレータを渡す
-			EXPECT_FALSE(list.AddNode(it, 1));
+			EXPECT_FALSE(list.AddNode(it));
 
 			//別リストのイテレータを渡す
 			DoublyLinkedList otherList;
-			EXPECT_FALSE(list.AddNode(otherList.GetBegin(), 1));
+			EXPECT_FALSE(list.AddNode(otherList.GetBegin()));
 
 			//要素が追加されていないことを確認
 			EXPECT_EQ(0, list.GetSize());
@@ -368,7 +369,8 @@ namespace ex01_DataStructure
 			DoublyLinkedList list;
 			DoublyLinkedList::Iterator it = list.GetBegin();
 			//要素を２つ用意する
-			list.AddNode(it, 2);
+			list.AddNode(it);
+			list.AddNode(it);
 			std::string str = "元々先頭の要素";
 			std::string str2 = "元々２番目の要素";
 			it->name = str;
@@ -393,7 +395,7 @@ namespace ex01_DataStructure
 			DoublyLinkedList list;
 			DoublyLinkedList::Iterator it = list.GetBegin();
 			//要素を追加しておく
-			list.AddNode(it, 1);
+			list.AddNode(it);
 
 			//末尾の要素を削除
 			it = list.GetEnd();
@@ -415,7 +417,8 @@ namespace ex01_DataStructure
 			DoublyLinkedList list;
 			DoublyLinkedList::Iterator it = list.GetBegin();
 			//要素を2つ用意する
-			list.AddNode(it, 2);
+			list.AddNode(it);
+			list.AddNode(it);
 			std::string str = "元々先頭の要素";
 			it->name = str;
 			it++;//2番目の要素へ
@@ -443,7 +446,10 @@ namespace ex01_DataStructure
 			DoublyLinkedList::ConstIterator cit = list.GetConstBegin();
 
 			//要素を４つ用意 0123
-			list.AddNode(cit, 4);
+			list.AddNode(cit);
+			list.AddNode(cit);
+			list.AddNode(cit);
+			list.AddNode(cit);
 
 			//先頭の要素を削除 _123
 			const ResultData* pData = &*(cit + 1);//後ろの要素を格納
@@ -514,7 +520,7 @@ namespace ex01_DataStructure
 		TEST(GetBeginTest, CallGetBeginWhenEmpty)
 		{
 			DoublyLinkedList list;
-			EXPECT_TRUE(list.GetBegin().IsDummy());
+			EXPECT_DEATH(list.GetBegin()++, "Assertion failed");
 		}
 
 		/**********************************************************************************//**
@@ -549,7 +555,8 @@ namespace ex01_DataStructure
 			DoublyLinkedList list;
 
 			DoublyLinkedList::Iterator it = list.GetBegin();
-			list.AddNode(it, 2);
+			list.AddNode(it);
+			list.AddNode(it);
 
 			std::string name = "先頭要素";
 			it->name = name;
@@ -593,7 +600,9 @@ namespace ex01_DataStructure
 			DoublyLinkedList::Iterator itBegin = list.GetBegin();
 
 			//要素を3つ用意する
-			list.AddNode(itBegin, 3);
+			list.AddNode(itBegin);
+			list.AddNode(itBegin);
+			list.AddNode(itBegin);
 
 			//中央の要素を削除
 			list.DeleteNode(itBegin + 1);
@@ -632,7 +641,7 @@ namespace ex01_DataStructure
 		TEST(GetConstBeginTest, CallGetConstBeginWhenEmpty)
 		{
 			DoublyLinkedList list;
-			EXPECT_TRUE(list.GetConstBegin().IsDummy());
+			EXPECT_DEATH(list.GetConstBegin()++, "Assertion failed");
 		}
 
 		/**********************************************************************************//**
@@ -664,7 +673,8 @@ namespace ex01_DataStructure
 			DoublyLinkedList list;
 
 			DoublyLinkedList::ConstIterator cit = list.GetConstBegin();
-			list.AddNode(cit, 2);
+			list.AddNode(cit);
+			list.AddNode(cit);
 
 			EXPECT_TRUE(cit == list.GetConstBegin());
 		}
@@ -705,7 +715,9 @@ namespace ex01_DataStructure
 			DoublyLinkedList::ConstIterator citBegin = list.GetConstBegin();
 
 			//要素を3つ用意する
-			list.AddNode(citBegin, 3);
+			list.AddNode(citBegin);
+			list.AddNode(citBegin);
+			list.AddNode(citBegin);
 
 			//中央の要素を削除
 			list.DeleteNode(citBegin + 1);
@@ -744,7 +756,7 @@ namespace ex01_DataStructure
 		TEST(GetEndTest, CallGetEndWhenEmpty)
 		{
 			DoublyLinkedList list;
-			EXPECT_TRUE(list.GetEnd().IsDummy());
+			EXPECT_DEATH(list.GetEnd()++, "Assertion failed");
 		}
 
 		/**********************************************************************************//**
@@ -761,7 +773,7 @@ namespace ex01_DataStructure
 			DoublyLinkedList::Iterator it = list.GetBegin();
 
 			list.AddNode(it);
-			EXPECT_TRUE(list.GetEnd().IsDummy());
+			EXPECT_DEATH(list.GetEnd()++, "Assertion failed");
 		}
 
 		/**********************************************************************************//**
@@ -776,9 +788,10 @@ namespace ex01_DataStructure
 			DoublyLinkedList list;
 
 			DoublyLinkedList::Iterator it = list.GetBegin();
-			list.AddNode(it, 2);
+			list.AddNode(it);
+			list.AddNode(it);
 
-			EXPECT_TRUE(list.GetEnd().IsDummy());
+			EXPECT_DEATH(list.GetEnd()++, "Assertion failed");
 		}
 
 		/**********************************************************************************//**
@@ -795,13 +808,13 @@ namespace ex01_DataStructure
 
 			//先頭に要素を追加
 			list.AddNode(it);
-			EXPECT_TRUE(list.GetEnd().IsDummy());
+			EXPECT_DEATH(list.GetEnd()++, "Assertion failed");
 			//末尾に要素を追加
 			list.AddNode(list.GetEnd());
-			EXPECT_TRUE(list.GetEnd().IsDummy());
+			EXPECT_DEATH(list.GetEnd()++, "Assertion failed");
 			//中央に要素を追加
 			list.AddNode(list.GetBegin() + 1);
-			EXPECT_TRUE(list.GetEnd().IsDummy());
+			EXPECT_DEATH(list.GetEnd()++, "Assertion failed");
 		}
 
 		/**********************************************************************************//**
@@ -817,17 +830,19 @@ namespace ex01_DataStructure
 			DoublyLinkedList::Iterator itBegin = list.GetBegin();
 
 			//要素を3つ用意する
-			list.AddNode(itBegin, 3);
+			list.AddNode(itBegin);
+			list.AddNode(itBegin);
+			list.AddNode(itBegin);
 
 			//中央の要素を削除
 			list.DeleteNode(itBegin + 1);
-			EXPECT_TRUE(list.GetEnd().IsDummy());
+			EXPECT_DEATH(list.GetEnd()++, "Assertion failed");
 			//先頭の要素を削除
 			list.DeleteNode(itBegin);
-			EXPECT_TRUE(list.GetEnd().IsDummy());
+			EXPECT_DEATH(list.GetEnd()++, "Assertion failed");
 			//末尾の要素を削除
 			EXPECT_FALSE(list.DeleteNode(list.GetEnd()));//失敗することを確認
-			EXPECT_TRUE(list.GetEnd().IsDummy());
+			EXPECT_DEATH(list.GetEnd()++, "Assertion failed");
 		}
 
 		/**********************************************************************************//**
@@ -854,7 +869,7 @@ namespace ex01_DataStructure
 		TEST(GetConstEndTest, CallGetConstEndWhenEmpty)
 		{
 			DoublyLinkedList list;
-			EXPECT_TRUE(list.GetConstEnd().IsDummy());
+			EXPECT_DEATH(list.GetConstEnd()++, "Assertion failed");
 		}
 
 		/**********************************************************************************//**
@@ -872,7 +887,7 @@ namespace ex01_DataStructure
 
 			list.AddNode(it);
 
-			EXPECT_TRUE(list.GetConstEnd().IsDummy());
+			EXPECT_DEATH(list.GetConstEnd()++, "Assertion failed");
 		}
 
 		/**********************************************************************************//**
@@ -887,9 +902,10 @@ namespace ex01_DataStructure
 			DoublyLinkedList list;
 
 			DoublyLinkedList::Iterator it = list.GetBegin();
-			list.AddNode(it, 2);
+			list.AddNode(it);
+			list.AddNode(it);
 
-			EXPECT_TRUE(list.GetConstEnd().IsDummy());
+			EXPECT_DEATH(list.GetConstEnd()++, "Assertion failed");
 		}
 
 		/**********************************************************************************//**
@@ -905,13 +921,13 @@ namespace ex01_DataStructure
 
 			//先頭に要素を追加
 			list.AddNode(list.GetBegin());
-			EXPECT_TRUE(list.GetConstEnd().IsDummy());
+			EXPECT_DEATH(list.GetConstEnd()++, "Assertion failed");
 			//末尾に要素を追加
 			list.AddNode(list.GetEnd());
-			EXPECT_TRUE(list.GetConstEnd().IsDummy());
+			EXPECT_DEATH(list.GetConstEnd()++, "Assertion failed");
 			//中央に要素を追加
 			list.AddNode(list.GetBegin() + 1);
-			EXPECT_TRUE(list.GetConstEnd().IsDummy());
+			EXPECT_DEATH(list.GetConstEnd()++, "Assertion failed");
 		}
 
 		/**********************************************************************************//**
@@ -927,17 +943,19 @@ namespace ex01_DataStructure
 			DoublyLinkedList::Iterator itBegin = list.GetBegin();
 
 			//要素を3つ用意する
-			list.AddNode(itBegin, 3);
+			list.AddNode(itBegin);
+			list.AddNode(itBegin);
+			list.AddNode(itBegin);
 
 			//中央の要素を削除
 			list.DeleteNode(itBegin + 1);
-			EXPECT_TRUE(list.GetConstEnd().IsDummy());
+			EXPECT_DEATH(list.GetConstEnd()++, "Assertion failed");
 			//先頭の要素を削除
 			list.DeleteNode(itBegin);
-			EXPECT_TRUE(list.GetConstEnd().IsDummy());
+			EXPECT_DEATH(list.GetConstEnd()++, "Assertion failed");
 			//末尾の要素を削除
 			EXPECT_FALSE(list.DeleteNode(list.GetEnd()));
-			EXPECT_TRUE(list.GetConstEnd().IsDummy());
+			EXPECT_DEATH(list.GetConstEnd()++, "Assertion failed");
 
 		}
 
@@ -966,6 +984,10 @@ namespace ex01_DataStructure
 		{
 			DoublyLinkedList::Iterator it;
 			EXPECT_DEATH(it->name, "Assertion failed");//エラーになれば成功
+
+			//コンストイテレータ
+			DoublyLinkedList::ConstIterator cit;
+			EXPECT_DEATH(cit->name, "Assertion failed");//エラーになれば成功
 		}
 
 		/**********************************************************************************//**
@@ -1011,6 +1033,10 @@ namespace ex01_DataStructure
 			DoublyLinkedList::Iterator it = list.GetBegin();
 
 			EXPECT_DEATH(it->name, "Assertion failed");//エラーになれば成功
+
+			//コンストイテレータ
+			DoublyLinkedList::ConstIterator cit = list.GetConstBegin();
+			EXPECT_DEATH(cit->name, "Assertion failed");//エラーになれば成功
 		}
 
 
@@ -1027,6 +1053,10 @@ namespace ex01_DataStructure
 			DoublyLinkedList::Iterator it = list.GetEnd();
 
 			EXPECT_DEATH(it->name, "Assertion failed");//エラーになれば成功
+
+			//コンストイテレータ
+			DoublyLinkedList::ConstIterator cit = list.GetConstEnd();
+			EXPECT_DEATH(cit->name, "Assertion failed");//エラーになれば成功
 		}
 
 		//======================== イテレータをリストの末尾に向かって一つ進める ===========================
@@ -1043,6 +1073,10 @@ namespace ex01_DataStructure
 			DoublyLinkedList::Iterator it;
 
 			EXPECT_DEATH(it++, "Assertion failed");
+
+			//コンストイテレータ
+			DoublyLinkedList::ConstIterator cit;
+			EXPECT_DEATH(cit++, "Assertion failed");
 		}
 
 		/**********************************************************************************//**
@@ -1058,6 +1092,10 @@ namespace ex01_DataStructure
 			DoublyLinkedList::Iterator it = list.GetBegin();
 
 			EXPECT_DEATH(it++, "Assertion failed");
+
+			//コンストイテレータ
+			DoublyLinkedList::ConstIterator cit = list.GetConstBegin();
+			EXPECT_DEATH(cit++, "Assertion failed");
 		}
 
 		/**********************************************************************************//**
@@ -1073,6 +1111,10 @@ namespace ex01_DataStructure
 			DoublyLinkedList::Iterator it = list.GetEnd();
 
 			EXPECT_DEATH(it++, "Assertion failed");
+
+			//コンストイテレータ
+			DoublyLinkedList::ConstIterator cit = list.GetConstEnd();
+			EXPECT_DEATH(cit++, "Assertion failed");
 		}
 
 		/**********************************************************************************//**
@@ -1087,13 +1129,14 @@ namespace ex01_DataStructure
 			DoublyLinkedList list;
 			DoublyLinkedList::Iterator it = list.GetEnd();
 
-			list.AddNode(it, 2);
+			list.AddNode(it);
+			list.AddNode(it);
 
 			std::string test1 = "1";
 			std::string test2 = "2";
 
 			it->name = test1;
-			(it+1)->name = test2;
+			(it + 1)->name = test2;
 
 			//先頭要素　2番目の要素　末尾ダミーの順に確認
 			EXPECT_EQ(test1, it->name);
@@ -1101,6 +1144,16 @@ namespace ex01_DataStructure
 			EXPECT_EQ(test2, it->name);
 			it++;
 			EXPECT_TRUE(list.GetEnd() == it);
+
+			//コンストイテレータ
+			DoublyLinkedList::ConstIterator cit = list.GetConstBegin();
+
+			//先頭要素　2番目の要素　末尾ダミーの順に確認
+			EXPECT_EQ(test1, cit->name);
+			cit++;
+			EXPECT_EQ(test2, cit->name);
+			cit++;
+			EXPECT_TRUE(list.GetEnd() == cit);
 		}
 
 		/**********************************************************************************//**
@@ -1115,11 +1168,18 @@ namespace ex01_DataStructure
 			DoublyLinkedList list;
 			DoublyLinkedList::Iterator it = list.GetBegin();
 
-			list.AddNode(it, 1);
+			list.AddNode(it);
 
 			//前置インクリメント時と実行後に確認
 			EXPECT_TRUE(list.GetEnd() == ++it);
 			EXPECT_TRUE(list.GetEnd() == it);
+
+			//コンストイテレータ
+			DoublyLinkedList::ConstIterator cit = list.GetConstBegin();
+
+			//後置インクリメント時と実行後に確認
+			EXPECT_TRUE(list.GetEnd() == ++cit);
+			EXPECT_TRUE(list.GetEnd() == cit);
 		}
 
 		/**********************************************************************************//**
@@ -1129,16 +1189,23 @@ namespace ex01_DataStructure
 						後置インクリメントを行った際の挙動を確認しています。\n
 						次の要素を指すと成功です。\n
 		*//***********************************************************************************/
-		TEST(IteratorIncrement,	BackwardIncrement)
+		TEST(IteratorIncrement, BackwardIncrement)
 		{
 			DoublyLinkedList list;
 			DoublyLinkedList::Iterator it = list.GetBegin();
 
-			list.AddNode(it, 1);
+			list.AddNode(it);
 
 			//後置インクリメント時と実行後に確認
 			EXPECT_TRUE(list.GetBegin() == it++);
 			EXPECT_TRUE(list.GetEnd() == it);
+
+			//コンストイテレータ
+			DoublyLinkedList::ConstIterator cit = list.GetConstBegin();
+
+			//後置インクリメント時と実行後に確認
+			EXPECT_TRUE(list.GetBegin() == cit++);
+			EXPECT_TRUE(list.GetEnd() == cit);
 		}
 
 		//======================== イテレータをリストの先頭に向かって一つ進める ===========================
@@ -1155,6 +1222,10 @@ namespace ex01_DataStructure
 			DoublyLinkedList::Iterator it;
 
 			EXPECT_DEATH(it--, "Assertion failed");
+
+			//コンストイテレータ
+			DoublyLinkedList::ConstIterator cit;
+			EXPECT_DEATH(cit--, "Assertion failed");
 		}
 
 		/**********************************************************************************//**
@@ -1170,6 +1241,10 @@ namespace ex01_DataStructure
 			DoublyLinkedList::Iterator it = list.GetEnd();
 
 			EXPECT_DEATH(it--, "Assertion failed");
+
+			//コンストイテレータ
+			DoublyLinkedList::ConstIterator cit = list.GetConstEnd();
+			EXPECT_DEATH(cit--, "Assertion failed");
 		}
 
 		/**********************************************************************************//**
@@ -1185,6 +1260,10 @@ namespace ex01_DataStructure
 			DoublyLinkedList::Iterator it = list.GetBegin();
 
 			EXPECT_DEATH(it--, "Assertion failed");
+
+			//コンストイテレータ
+			DoublyLinkedList::ConstIterator cit = list.GetConstBegin();
+			EXPECT_DEATH(cit--, "Assertion failed");
 		}
 
 		/**********************************************************************************//**
@@ -1199,13 +1278,14 @@ namespace ex01_DataStructure
 			DoublyLinkedList list;
 			DoublyLinkedList::Iterator it = list.GetEnd();
 
-			list.AddNode(it, 2);
+			list.AddNode(it);
+			list.AddNode(it);
 
 			std::string test1 = "1";
 			std::string test2 = "2";
 
 			it->name = test1;
-			(it+1)->name = test2;
+			(it + 1)->name = test2;
 
 			//末尾ダミー　2番目の要素　先頭要素の順に確認
 			it = list.GetEnd();
@@ -1214,6 +1294,16 @@ namespace ex01_DataStructure
 			EXPECT_EQ(test2, it->name);
 			it--;
 			EXPECT_EQ(test1, it->name);
+
+			//コンストイテレータ
+			DoublyLinkedList::ConstIterator cit = list.GetConstEnd();
+
+			//末尾ダミー　2番目の要素　先頭要素の順に確認
+			EXPECT_TRUE(list.GetEnd() == cit);
+			cit--;
+			EXPECT_EQ(test2, cit->name);
+			cit--;
+			EXPECT_EQ(test1, cit->name);
 		}
 
 		/**********************************************************************************//**
@@ -1228,12 +1318,19 @@ namespace ex01_DataStructure
 			DoublyLinkedList list;
 			DoublyLinkedList::Iterator it = list.GetBegin();
 
-			list.AddNode(it, 1);
+			list.AddNode(it);
 
 			//前置デクリメント実行時と実行後に確認
 			it = list.GetEnd();
 			EXPECT_TRUE(list.GetBegin() == --it);
 			EXPECT_TRUE(list.GetBegin() == it);
+
+			//コンストイテレータ
+			DoublyLinkedList::ConstIterator cit = list.GetConstEnd();
+
+			//前置デクリメント実行時と実行後に確認
+			EXPECT_TRUE(list.GetBegin() == --cit);
+			EXPECT_TRUE(list.GetBegin() == cit);
 		}
 
 		/**********************************************************************************//**
@@ -1243,17 +1340,24 @@ namespace ex01_DataStructure
 						後置デクリメントを行った際の挙動を確認しています。\n
 						次の要素を指すと成功です。\n
 		*//***********************************************************************************/
-		TEST(IteratorDecrement,	BackwardDecrement)
+		TEST(IteratorDecrement, BackwardDecrement)
 		{
 			DoublyLinkedList list;
 			DoublyLinkedList::Iterator it = list.GetBegin();
 
-			list.AddNode(it, 1);
+			list.AddNode(it);
 
 			//後置デクリメント実行時と実行後に確認
 			it = list.GetEnd();
 			EXPECT_TRUE(list.GetEnd() == it--);
 			EXPECT_TRUE(list.GetBegin() == it);
+
+			//コンストイテレータ
+			DoublyLinkedList::ConstIterator cit = list.GetConstEnd();
+
+			//後置デクリメント実行時と実行後に確認
+			EXPECT_TRUE(list.GetEnd() == cit--);
+			EXPECT_TRUE(list.GetBegin() == cit);
 		}
 
 		//============================== イテレータのコピー =================================
@@ -1284,6 +1388,11 @@ namespace ex01_DataStructure
 			DoublyLinkedList::Iterator it2 = it;
 
 			EXPECT_TRUE(it == it2);
+
+			//コンストイテレータ
+			DoublyLinkedList::ConstIterator cit = list.GetConstBegin();
+			DoublyLinkedList::ConstIterator cit2 = cit;
+			EXPECT_TRUE(cit == cit2);
 		}
 
 		//=============================== イテレータの代入 ==================================
@@ -1316,6 +1425,12 @@ namespace ex01_DataStructure
 			it2 = it;
 
 			EXPECT_TRUE(it == it2);
+
+			//コンストイテレータ
+			DoublyLinkedList::ConstIterator cit = list.GetConstBegin();
+			DoublyLinkedList::ConstIterator cit2;
+			cit2 = cit;
+			EXPECT_TRUE(cit == cit2);
 		}
 
 		//============================= 二つのイテレータが同一のものか比較する ================================
@@ -1325,12 +1440,13 @@ namespace ex01_DataStructure
 			@details	ID:イテレータ-21\n
 						イテレータの比較テストです。\n
 						リストが空の状態での先頭イテレータと末尾イテレータが同一かどうか比較した際の挙動を確認しています。\n
-						等しければ成功です。\n
+						戻り値が真であれば成功です。\n
 		*//***********************************************************************************/
 		TEST(IteratorComparison, ComparisonEqualBeginAndEndWhenEmpty)
 		{
 			DoublyLinkedList list;
 			EXPECT_TRUE(list.GetBegin() == list.GetEnd());
+			EXPECT_TRUE(list.GetConstBegin() == list.GetConstEnd());
 		}
 
 		/**********************************************************************************//**
@@ -1338,14 +1454,21 @@ namespace ex01_DataStructure
 			@details	ID:イテレータ-22\n
 						イテレータの比較テストです。\n
 						同一のイテレータが同一かどうか比較した際の挙動を確認しています。\n
-						等しければ成功です。\n
+						戻り値が真であれば成功です。\n
 		*//***********************************************************************************/
 		TEST(IteratorComparison, ComparisonEqualSameOne)
 		{
 			DoublyLinkedList list;
 			DoublyLinkedList::Iterator it = list.GetBegin();
-			
+
 			EXPECT_TRUE(it == it);
+
+			//コンストイテレータ
+			DoublyLinkedList::ConstIterator cit = list.GetConstBegin();
+			EXPECT_TRUE(cit == cit);
+
+			//コンストイテレータとイテレータ
+			EXPECT_TRUE(cit == it);
 		}
 
 		/**********************************************************************************//**
@@ -1353,7 +1476,7 @@ namespace ex01_DataStructure
 			@details	ID:イテレータ-23\n
 						イテレータの比較テストです。\n
 						異なるイテレータが同一かどうか比較した際の挙動を確認しています。\n
-						等しければ成功です。\n
+						戻り値が偽であれば成功です。\n
 		*//***********************************************************************************/
 		TEST(IteratorComparison, ComparisonEqualDifferentOne)
 		{
@@ -1373,6 +1496,15 @@ namespace ex01_DataStructure
 			it2 = list2.GetBegin();
 
 			EXPECT_FALSE(it == it2);
+
+			//コンストイテレータ
+			//示す要素が異なる
+			DoublyLinkedList::ConstIterator cit = list.GetConstEnd();
+			EXPECT_FALSE(it == cit);
+
+			//参照するリストが異なる
+			cit = list2.GetBegin();
+			EXPECT_FALSE(it == cit);
 		}
 
 		//============================ 二つのイテレータが異なるのものか比較する ==============================
@@ -1382,12 +1514,15 @@ namespace ex01_DataStructure
 			@details	ID:イテレータ-24\n
 						イテレータの比較テストです。\n
 						リストが空の状態での先頭イテレータと末尾イテレータが異なるものか比較した際の挙動を確認しています。\n
-						異なっていなければ成功です。\n
+						戻り値が偽であれば成功です。\n
 		*//***********************************************************************************/
 		TEST(IteratorComparison, ComparisonNotEqualBeginAndEndWhenEmpty)
 		{
 			DoublyLinkedList list;
 			EXPECT_FALSE(list.GetBegin() != list.GetEnd());
+
+			//コンストイテレータ
+			EXPECT_FALSE(list.GetConstBegin() != list.GetConstEnd());
 		}
 
 		/**********************************************************************************//**
@@ -1395,7 +1530,7 @@ namespace ex01_DataStructure
 			@details	ID:イテレータ-25\n
 						イテレータの比較テストです。\n
 						同一のイテレータが異なるものか比較した際の挙動を確認しています。\n
-						異なっていなければ成功です。\n
+						戻り値が偽であれば成功です。\n
 		*//***********************************************************************************/
 		TEST(IteratorComparison, ComparisonNotEqualSameOne)
 		{
@@ -1403,6 +1538,10 @@ namespace ex01_DataStructure
 			DoublyLinkedList::Iterator it = list.GetBegin();
 
 			EXPECT_FALSE(it != it);
+
+			//コンストイテレータ
+			DoublyLinkedList::ConstIterator cit = list.GetConstBegin();
+			EXPECT_FALSE(cit != cit);
 		}
 
 		/**********************************************************************************//**
@@ -1410,7 +1549,7 @@ namespace ex01_DataStructure
 			@details	ID:イテレータ-26\n
 						イテレータの比較テストです。\n
 						異なるイテレータが異なるものか比較した際の挙動を確認しています。\n
-						異なっていれば成功です。\n
+						戻り値が真であれば成功です。\n
 		*//***********************************************************************************/
 		TEST(IteratorComparison, ComparisonNotEqualDifferentOne)
 		{
@@ -1430,7 +1569,243 @@ namespace ex01_DataStructure
 			it2 = list2.GetBegin();
 
 			EXPECT_TRUE(it != it2);
+
+			//コンストイテレータ
+			//示す要素が異なる
+			DoublyLinkedList::ConstIterator cit = list.GetConstEnd();
+			EXPECT_TRUE(it != cit);
+
+			//参照するリストが異なる
+			cit = list2.GetConstBegin();
+			EXPECT_TRUE(it != cit);
 		}
 
+		//====================== 末尾に指定した数進めたイテレータを返す ==========================
+
+		/**********************************************************************************//**
+			@brief		イテレータの末尾に指定した数進めたイテレータを返す機能の挙動テスト
+			@details	ID:イテレータ追加機能-0\n
+						イテレータの末尾に進めたイテレータを返す機能のテストです。\n
+						リストの参照がない場合に実行した際の挙動を確認しています。\n
+						Assert発生で成功です。\n
+		*//***********************************************************************************/
+		TEST(IteratorOperatorPlus, PlusWhenNoReference)
+		{
+			DoublyLinkedList::Iterator it;
+
+			EXPECT_DEATH(it + 1, "Assertion failed");
+			EXPECT_DEATH(it + 0, "Assertion failed");
+			EXPECT_DEATH(it + -1, "Assertion failed");
+
+			//コンストイテレータ
+			DoublyLinkedList::ConstIterator cit;
+
+			EXPECT_DEATH(cit + 1, "Assertion failed");
+			EXPECT_DEATH(cit + 0, "Assertion failed");
+			EXPECT_DEATH(cit + -1, "Assertion failed");
+		}
+
+		/**********************************************************************************//**
+			@brief		イテレータの末尾に指定した数進めたイテレータを返す機能の挙動テスト
+			@details	ID:イテレータ追加機能-1\n
+						イテレータの末尾に進めたイテレータを返す機能のテストです。\n
+						リストが空の場合に先頭イテレータに対して呼び出した際の挙動を確認しています。\n
+						末尾のイテレータを返すと成功です。\n
+		*//***********************************************************************************/
+		TEST(IteratorOperatorPlus, PlusWhenEmpty)
+		{
+			DoublyLinkedList list;
+			DoublyLinkedList::Iterator it = list.GetBegin();
+			DoublyLinkedList::Iterator itEnd = list.GetEnd();
+
+			EXPECT_TRUE(it + 1 == itEnd);
+			EXPECT_TRUE(it + 0 == itEnd);
+			EXPECT_TRUE(it + -1 == itEnd);
+
+			//コンストイテレータ
+			DoublyLinkedList::ConstIterator cit = list.GetConstBegin();
+
+			EXPECT_TRUE(cit + 1 == itEnd);
+			EXPECT_TRUE(cit + 0 == itEnd);
+			EXPECT_TRUE(cit + -1 == itEnd);
+		}
+
+		/**********************************************************************************//**
+			@brief		イテレータの末尾に指定した数進めたイテレータを返す機能の挙動テスト
+			@details	ID:イテレータ追加機能-2\n
+						イテレータの末尾に進めたイテレータを返す機能のテストです。\n
+						末尾イテレータに対して呼び出した際の挙動を確認しています。\n
+						０、正の数では末尾のイテレータを返し、負の数では先頭に移動したイテレータを返すと成功です。\n
+		*//***********************************************************************************/
+		TEST(IteratorOperatorPlus, CallByEndIterator)
+		{
+			DoublyLinkedList list;
+			DoublyLinkedList::Iterator it = list.GetBegin();
+
+			list.AddNode(it);
+
+			it = list.GetEnd();
+			EXPECT_TRUE((it + 1) == list.GetEnd());
+			EXPECT_TRUE((it + 0) == list.GetEnd());
+			EXPECT_TRUE((it + -1) == list.GetBegin());
+
+			//コンストイテレータ
+			DoublyLinkedList::ConstIterator cit = list.GetConstEnd();
+
+			EXPECT_TRUE((cit + 1) == list.GetEnd());
+			EXPECT_TRUE((cit + 0) == list.GetEnd());
+			EXPECT_TRUE((cit + -1) == list.GetBegin());
+
+		}
+
+		/**********************************************************************************//**
+			@brief		イテレータの末尾に指定した数進めたイテレータを返す機能の挙動テスト
+			@details	ID:イテレータ追加機能-3\n
+						イテレータの末尾に進めたイテレータを返す機能のテストです。\n
+						リストに二つ以上の要素がある場合に呼び出した際の挙動を確認しています。\n
+						指定数移動したイテレータを返し、範囲外の数では末尾または先頭のイテレータを返すと成功です。\n
+		*//***********************************************************************************/
+		TEST(IteratorOperatorPlus, PlusWhenMultipleData)
+		{
+			DoublyLinkedList list;
+			DoublyLinkedList::Iterator it = list.GetBegin();
+
+			list.AddNode(it);
+			list.AddNode(it);
+
+			it++;//二番目の要素へ
+
+			EXPECT_TRUE((it + 2) == list.GetEnd());//末尾範囲外
+			EXPECT_TRUE((it + 1) == list.GetEnd());//末尾
+			EXPECT_TRUE((it + 0) == ++list.GetBegin());//２番目の要素
+			EXPECT_TRUE((it + -1) == list.GetBegin());//先頭
+			EXPECT_TRUE((it + -2) == list.GetBegin());//先頭範囲外
+
+			//コンストイテレータ
+			DoublyLinkedList::ConstIterator cit = list.GetConstBegin();
+
+			cit++;//２番目の要素へ
+
+			EXPECT_TRUE((cit + 2) == list.GetEnd());
+			EXPECT_TRUE((cit + 1) == list.GetEnd());
+			EXPECT_TRUE((cit + 0) == ++list.GetBegin());
+			EXPECT_TRUE((cit + -1) == list.GetBegin());
+			EXPECT_TRUE((cit + -2) == list.GetBegin());
+		}
+
+		//====================== 先頭に指定した数進めたイテレータを返す ==========================
+
+		/**********************************************************************************//**
+			@brief		イテレータの先頭に指定した数進めたイテレータを返す機能の挙動テスト
+			@details	ID:イテレータ追加機能-4\n
+						イテレータの先頭に進めたイテレータを返す機能のテストです。\n
+						リストの参照がない場合に実行した際の挙動を確認しています。\n
+						Assert発生で成功です。\n
+		*//***********************************************************************************/
+		TEST(IteratorOperatorMinus, MinusWhenNoReference)
+		{
+			DoublyLinkedList::Iterator it;
+
+			EXPECT_DEATH(it - 1, "Assertion failed");
+			EXPECT_DEATH(it - 0, "Assertion failed");
+			EXPECT_DEATH(it - -1, "Assertion failed");
+
+			//コンストイテレータ
+			DoublyLinkedList::ConstIterator cit;
+
+			EXPECT_DEATH(cit - 1, "Assertion failed");
+			EXPECT_DEATH(cit - 0, "Assertion failed");
+			EXPECT_DEATH(cit - -1, "Assertion failed");
+		}
+
+		/**********************************************************************************//**
+			@brief		イテレータの先頭に指定した数進めたイテレータを返す機能の挙動テスト
+			@details	ID:イテレータ追加機能-5\n
+						イテレータの先頭に進めたイテレータを返す機能のテストです。\n
+						リストが空の場合に先頭イテレータに対して呼び出した際の挙動を確認しています。\n
+						先頭のイテレータを返すと成功です。\n
+		*//***********************************************************************************/
+		TEST(IteratorOperatorMinus, MinusWhenEmpty)
+		{
+			DoublyLinkedList list;
+			DoublyLinkedList::Iterator it = list.GetBegin();
+			DoublyLinkedList::Iterator itBegin = list.GetBegin();
+
+			EXPECT_TRUE(it - 1 == itBegin);
+			EXPECT_TRUE(it - 0 == itBegin);
+			EXPECT_TRUE(it - -1 == itBegin);
+
+			//コンストイテレータ
+			DoublyLinkedList::ConstIterator cit = list.GetConstBegin();
+
+			EXPECT_TRUE(cit - 1 == itBegin);
+			EXPECT_TRUE(cit - 0 == itBegin);
+			EXPECT_TRUE(cit - -1 == itBegin);
+		}
+
+		/**********************************************************************************//**
+			@brief		イテレータの先頭に指定した数進めたイテレータを返す機能の挙動テスト
+			@details	ID:イテレータ追加機能-6\n
+						イテレータの先頭に進めたイテレータを返す機能のテストです。\n
+						先頭イテレータに対して呼び出した際の挙動を確認しています。\n
+						０、正の数では先頭のイテレータを返し、負の数では末尾に移動したイテレータを返すと成功です。\n
+		*//***********************************************************************************/
+		TEST(IteratorOperatorMinus, CallByTopIterator)
+		{
+			DoublyLinkedList list;
+			DoublyLinkedList::Iterator it = list.GetBegin();
+
+			list.AddNode(it);
+
+			EXPECT_TRUE((it - 1) == list.GetBegin());
+			EXPECT_TRUE((it - 0) == list.GetBegin());
+			EXPECT_TRUE((it - -1) == list.GetEnd());
+
+			//コンストイテレータ
+			DoublyLinkedList::ConstIterator cit = list.GetConstBegin();
+
+			EXPECT_TRUE((cit - 1) == list.GetBegin());
+			EXPECT_TRUE((cit - 0) == list.GetBegin());
+			EXPECT_TRUE((cit - -1) == list.GetEnd());
+
+		}
+
+		/**********************************************************************************//**
+			@brief		イテレータの先頭に指定した数進めたイテレータを返す機能の挙動テスト
+			@details	ID:イテレータ追加機能-7\n
+						イテレータの先頭に進めたイテレータを返す機能のテストです。\n
+						リストに二つ以上の要素がある場合に呼び出した際の挙動を確認しています。\n
+						指定数移動したイテレータを返し、範囲外の数では末尾または先頭のイテレータを返すと成功です。\n
+		*//***********************************************************************************/
+		TEST(IteratorOperatorMinus, MinusWhenMultipleData)
+		{
+			DoublyLinkedList list;
+			DoublyLinkedList::Iterator it = list.GetBegin();
+
+			//要素を2つ用意
+			list.AddNode(it);
+			list.AddNode(it);
+
+			it++;//二番目の要素へ
+
+			EXPECT_TRUE((it - 2) == list.GetBegin());//先頭範囲外
+			EXPECT_TRUE((it - 1) == list.GetBegin());//先頭
+			EXPECT_TRUE((it - 0) == ++list.GetBegin());//２番目の要素
+			EXPECT_TRUE((it - -1) == list.GetEnd());//末尾
+			EXPECT_TRUE((it - -2) == list.GetEnd());//末尾範囲外
+
+			//コンストイテレータ
+			DoublyLinkedList::ConstIterator cit = list.GetConstBegin();
+
+			cit++;//２番目の要素へ
+
+			EXPECT_TRUE((cit - 2) == list.GetBegin());//先頭範囲外
+			EXPECT_TRUE((cit - 1) == list.GetBegin());//先頭
+			EXPECT_TRUE((cit - 0) == ++list.GetBegin());//２番目の要素
+			EXPECT_TRUE((cit - -1) == list.GetEnd());//末尾
+			EXPECT_TRUE((cit - -2) == list.GetEnd());//末尾範囲外
+		}
+
+		//TODO コンストのイテレータについて同じテストをする
 	}//namespace chapter2
 }//namespace ex01_DataStructure
