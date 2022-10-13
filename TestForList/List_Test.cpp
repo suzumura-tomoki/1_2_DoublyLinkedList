@@ -308,10 +308,9 @@ namespace ex01_DataStructure
 
 			//末尾に要素を追加
 			cit = list.GetConstEnd();
-			pData = &*cit;
 			EXPECT_TRUE(list.Insert(cit, data));
 			EXPECT_EQ(++listSize, list.GetSize());//要素が増えていることを確認
-			EXPECT_EQ(pData, &*(cit + 1));//後ろにずれていることを確認
+			EXPECT_TRUE(list.GetConstEnd() == (cit + 1));//後ろにずれていることを確認
 
 		}
 
@@ -1229,7 +1228,6 @@ namespace ex01_DataStructure
 			//コンストイテレータ
 			DoublyLinkedList::ConstIterator cit = list.GetConstBegin();
 
-			//TODO テストの修正
 			//後置インクリメント時と実行後に確認
 			EXPECT_TRUE(list.GetEnd() == ++cit);
 			EXPECT_TRUE(list.GetEnd() == cit);

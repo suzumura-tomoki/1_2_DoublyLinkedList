@@ -6,24 +6,19 @@ DoublyLinkedList::DoublyLinkedList()
 	dummy.pNext = nullptr;
 	dummy.resultData.name = "dummy";
 	dummy.resultData.score = "dummy";
-	//Node* pTop = &dummy;
+
+	pTop = &dummy;
+	size = 0;
 }
 
 DoublyLinkedList::~DoublyLinkedList()
 {
-	DoublyLinkedList::Node* pCurrent = pTop;
-	DoublyLinkedList::Node* pDeleteNode;
 
-	while (true)
+	DoublyLinkedList::Iterator it = GetBegin();
+
+	while (size > 0)
 	{
-		if (pCurrent == &dummy)
-			break;
-
-		pDeleteNode = pCurrent;
-		pCurrent = pCurrent->pNext;
-
-		delete pDeleteNode;
-
+		Delete(it);
 	}
 }
 
@@ -35,10 +30,14 @@ unsigned int DoublyLinkedList::GetSize()const
 bool DoublyLinkedList::Insert(ConstIterator& iterator, const ResultData& data)
 {
 	if (this != iterator.pList)
+	{
 		return false;
+	}
 
 	if (iterator.pNode == nullptr)
+	{
 		return false;
+	}
 
 	//新しい要素を生成
 	Node* pNewNode = new Node;
@@ -48,41 +47,18 @@ bool DoublyLinkedList::Insert(ConstIterator& iterator, const ResultData& data)
 
 	//前後の要素が新しい要素を参照するようにする
 	pNewNode->pNext->pPrevious = pNewNode;
+
 	if (pNewNode->pPrevious != nullptr)
+	{
+		//前の要素がある場合
 		pNewNode->pPrevious->pNext = pNewNode;
+	}
 
 	//先頭に追加した場合に先頭ポインタを更新
 	if (iterator.pNode == pTop)
+	{
 		pTop = pNewNode;
-
-	iterator--;//追加した要素へ移動
-	size++;
-
-	return true;
-}
-
-bool DoublyLinkedList::Insert(Iterator& iterator, const ResultData& data)
-{
-	if (this != iterator.pList)
-		return false;
-
-	if (iterator.pNode == nullptr)
-		return false;
-
-	//新しい要素を生成
-	Node* pNewNode = new Node;
-	pNewNode->resultData = data;
-	pNewNode->pNext = iterator.pNode;//追加する位置にあった要素を次の要素にする
-	pNewNode->pPrevious = pNewNode->pNext->pPrevious;//追加位置の前の要素を前の要素にする
-
-	//前後の要素が新しい要素を参照するようにする
-	pNewNode->pNext->pPrevious = pNewNode;
-	if (pNewNode->pPrevious != nullptr)
-		pNewNode->pPrevious->pNext = pNewNode;
-
-	//先頭に追加した場合に先頭ポインタを更新
-	if (iterator.pNode == pTop)
-		pTop = pNewNode;
+	}
 
 	iterator--;//追加した要素へ移動
 	size++;
@@ -94,19 +70,27 @@ bool DoublyLinkedList::Delete(ConstIterator& iterator)
 {
 	// イテレータが自分のリストのイテレータか判断する
 	if (this != iterator.pList)
+	{
 		return false;
+	}
 
 	//不正なイテレータか判断する
 	if (iterator.pNode == nullptr)
+	{
 		return false;
+	}
 
 	//ダミーノードか判断する
 	if (iterator.pNode == &iterator.pList->dummy)
+	{
 		return false;
+	}
 
 	//前の要素が削除対象の次の要素を指すように変更
 	if (iterator.pNode->pPrevious != nullptr)
+	{
 		iterator.pNode->pPrevious->pNext = iterator.pNode->pNext;
+	}
 
 	//次の要素が削除対象の前の要素を指すように変更
 	iterator.pNode->pNext->pPrevious = iterator.pNode->pPrevious;
@@ -117,7 +101,9 @@ bool DoublyLinkedList::Delete(ConstIterator& iterator)
 
 	//削除対象が先頭だったら先頭ポインタを更新
 	if (pDeleteNode == pTop)
+	{
 		pTop = iterator.pNode;
+	}
 
 	delete pDeleteNode;
 
@@ -153,13 +139,20 @@ DoublyLinkedList::ConstIterator DoublyLinkedList::GetConstEnd()const
 
 DoublyLinkedList::ConstIterator::ConstIterator()
 {
-	//何もしない
+	pNode = nullptr;
+	pList = nullptr;
 }
 
 DoublyLinkedList::ConstIterator::ConstIterator(const DoublyLinkedList* _pList, const Node* _pNode)
 {
 	pList = const_cast<DoublyLinkedList*>(_pList);
 	pNode = const_cast<Node*>(_pNode);
+}
+
+DoublyLinkedList::ConstIterator::ConstIterator(const ConstIterator& obj)
+{
+	this->pNode = obj.pNode;
+	this->pList = obj.pList;
 }
 
 DoublyLinkedList::ConstIterator::~ConstIterator()
@@ -208,35 +201,30 @@ DoublyLinkedList::ConstIterator DoublyLinkedList::ConstIterator::operator+(int n
 {
 	assert(this->pList != nullptr);//リストの参照がない場合
 
-	Node* pMoved = pNode;
-
 	if (n >= 0) {
+		ConstIterator cit = *this;
 
 		//末尾に進む
 		for (int i = 0; i < n; i++) {
 
 			//末尾を越えないように停止する
-			if (pMoved->pNext == nullptr)
-				return ConstIterator(pList, pMoved);
+			if (cit.pNode->pNext == nullptr)
+			{
+				return cit;
+			}
 
-			pMoved = pMoved->pNext;//(*this)++よりオーバーヘッドが少ない？
+			cit++;
 		}
 
-		return ConstIterator(pList, pMoved);
+		return cit;
+
 	}
 	else {
+		//絶対値を取得
+		n = static_cast<int>(labs(n));
 
-		//先頭に進む
-		for (int i = 0; i > n; i--) {
-
-			//先頭を越えないように停止する
-			if (pMoved->pPrevious == nullptr)
-				return ConstIterator(pList, pMoved);
-
-			pMoved = pMoved->pPrevious;//(*this)--よりオーバーヘッドが少ない？
-		}
-
-		return ConstIterator(pList, pMoved);
+		//先頭に進めたイテレータを返す
+		return (*this) - n;
 	}
 }
 
@@ -244,40 +232,48 @@ DoublyLinkedList::ConstIterator DoublyLinkedList::ConstIterator::operator-(int n
 {
 	assert(this->pList != nullptr);//リストの参照がない場合
 
-	Node* pMoved = pNode;
 
 	if (n >= 0) {
+		ConstIterator cit = *this;
 
 		//先頭に進む
 		for (int i = 0; i < n; i++) {
 
 			//先頭を越えないように停止する
-			if (pMoved->pPrevious == nullptr)
-				return ConstIterator(pList, pMoved);
+			if (cit.pNode->pPrevious == nullptr)
+			{
+				return cit;
+			}
 
-			pMoved = pMoved->pPrevious;//(*this)--よりオーバーヘッドが少ない？
+			cit--;
 		}
 
-		return ConstIterator(pList, pMoved);
+		return cit;
 	}
 	else {
+		//絶対値を取得
+		n = static_cast<int>(labs(n));
 
-		//末尾に進む
-		for (int i = 0; i > n; i--) {
-
-			//末尾を越えないように停止する
-			if (pMoved->pNext == nullptr)
-				return ConstIterator(pList, pMoved);
-
-			pMoved = pMoved->pNext;//(*this)++よりオーバーヘッドが少ない？
-		}
-
-		return ConstIterator(pList, pMoved);
+		//末尾に進めたイテレータを返す
+		return (*this) + n;
 	}
+}
+
+bool DoublyLinkedList::ConstIterator::operator==(const ConstIterator& it)const
+{
+	return this->pNode == it.pNode;
+}
+
+bool DoublyLinkedList::ConstIterator::operator!=(const ConstIterator& it)const
+{
+	return !(*this == it);
 }
 
 const ResultData& DoublyLinkedList::ConstIterator::operator*()const
 {
+	assert(pList != nullptr);//pListがnullptrでないこと
+	assert(pNode != &pList->dummy);//pNodeがダミーでないこと
+
 	return pNode->resultData;
 }
 
@@ -289,41 +285,14 @@ const ResultData* DoublyLinkedList::ConstIterator::operator->()const
 	return &pNode->resultData;
 }
 
-DoublyLinkedList::ConstIterator::ConstIterator(const ConstIterator& obj)
-{
-	this->pNode = obj.pNode;
-	this->pList = obj.pList;
-}
-
-bool DoublyLinkedList::ConstIterator::operator==(const ConstIterator& it)const
-{
-	return this->pNode == it.pNode;
-}
-
-bool DoublyLinkedList::ConstIterator::operator!=(const ConstIterator& it)const
-{
-
-	return this->pNode != it.pNode;
-}
-
-bool DoublyLinkedList::ConstIterator::operator==(const Iterator& it) const
-{
-	return this->pNode == it.pNode;
-}
-
-bool DoublyLinkedList::ConstIterator::operator!=(const Iterator& it) const
-{
-	return this->pNode != it.pNode;
-}
-
 DoublyLinkedList::Iterator::Iterator()
 {
 	//何もしない
 }
 
-DoublyLinkedList::Iterator::Iterator(DoublyLinkedList* _pList, Node* _pNode) : ConstIterator(_pList, _pNode)
+DoublyLinkedList::Iterator::Iterator(const DoublyLinkedList* _pList, const Node* _pNode) : ConstIterator(_pList, _pNode)
 {
-	//基底クラスIteratorのコンストラクタを呼び出す
+	//基底クラスConstIteratorのコンストラクタに引数を渡す
 	//ここでは何もしない
 }
 
@@ -334,147 +303,57 @@ DoublyLinkedList::Iterator::~Iterator()
 
 DoublyLinkedList::Iterator& DoublyLinkedList::Iterator::operator++()
 {
-	assert(this->pList != nullptr);//リストの参照がない
-	assert(this->pNode != &this->pList->dummy);//末尾ノードである
+	ConstIterator::operator++();
 
-	pNode = pNode->pNext;
 	return *this;
 }
 
 DoublyLinkedList::Iterator DoublyLinkedList::Iterator::operator++(int)
 {
-	assert(this->pList != nullptr);//リストの参照がない
-	assert(this->pNode != &this->pList->dummy);//末尾ノードである
-
 	Iterator it = *this;
-	pNode = pNode->pNext;
+
+	operator++();
+
 	return it;
 }
 
 DoublyLinkedList::Iterator& DoublyLinkedList::Iterator::operator--()
 {
-	assert(this->pList != nullptr);//リストの参照がない
-	assert(this->pNode->pPrevious != nullptr);//先頭ノードである　またはリストが空の時の末尾ノード
+	ConstIterator::operator--();
 
-	pNode = pNode->pPrevious;
 	return *this;
 }
 
 DoublyLinkedList::Iterator DoublyLinkedList::Iterator::operator--(int)
 {
-	assert(this->pList != nullptr);//リストの参照がない
-	assert(this->pNode->pPrevious != nullptr);//先頭ノードである　またはリストが空の時の末尾ノード
 
 	Iterator it = *this;
-	pNode = pNode->pPrevious;
+
+	operator--();
+
 	return it;
 }
 
 DoublyLinkedList::Iterator DoublyLinkedList::Iterator::operator+(int n)
 {
-	assert(this->pList != nullptr);//リストの参照がない場合
-
-	Node* pMoved = pNode;
-
-	if (n >= 0) {
-
-		//末尾に進む
-		for (int i = 0; i < n; i++) {
-
-			//末尾を越えないように停止する
-			if (pMoved->pNext == nullptr)
-				return Iterator(pList, pMoved);
-
-			pMoved = pMoved->pNext;//(*this)++よりオーバーヘッドが少ない？
-		}
-
-		return Iterator(pList, pMoved);
-	}
-	else {
-
-		//先頭に進む
-		for (int i = 0; i > n; i--) {
-
-			//先頭を越えないように停止する
-			if (pMoved->pPrevious == nullptr)
-				return Iterator(pList, pMoved);
-
-			pMoved = pMoved->pPrevious;//(*this)--よりオーバーヘッドが少ない？
-		}
-
-		return Iterator(pList, pMoved);
-	}
+	ConstIterator cit = ConstIterator::operator+(n);
+	
+	return Iterator(cit.pList, cit.pNode);
 }
 
 DoublyLinkedList::Iterator DoublyLinkedList::Iterator::operator-(int n)
 {
-	assert(this->pList != nullptr);//リストの参照がない場合
+	ConstIterator cit = ConstIterator::operator-(n);
 
-	Node* pMoved = pNode;
-
-	if (n >= 0) {
-
-		//先頭に進む
-		for (int i = 0; i < n; i++) {
-
-			//先頭を越えないように停止する
-			if (pMoved->pPrevious == nullptr)
-				return Iterator(pList, pMoved);
-
-			pMoved = pMoved->pPrevious;//(*this)--よりオーバーヘッドが少ない？
-		}
-
-		return Iterator(pList, pMoved);
-	}
-	else {
-
-		//末尾に進む
-		for (int i = 0; i > n; i--) {
-
-			//末尾を越えないように停止する
-			if (pMoved->pNext == nullptr)
-				return Iterator(pList, pMoved);
-
-			pMoved = pMoved->pNext;//(*this)++よりオーバーヘッドが少ない？
-		}
-
-		return Iterator(pList, pMoved);
-	}
-
-}
-
-bool DoublyLinkedList::Iterator::operator==(Iterator& it) const
-{
-	return this->pNode == it.pNode;
-}
-
-bool DoublyLinkedList::Iterator::operator!=(Iterator& it) const
-{
-	return this->pNode != it.pNode;
-}
-
-bool DoublyLinkedList::Iterator::operator==(const ConstIterator& it) const
-{
-	return this->pNode == it.pNode;
-}
-
-bool DoublyLinkedList::Iterator::operator!=(const ConstIterator& it) const
-{
-	return this->pNode != it.pNode;
+	return Iterator(cit.pList, cit.pNode);
 }
 
 ResultData& DoublyLinkedList::Iterator::operator*()
 {
-	assert(pList != nullptr);//pListがnullptrでないこと
-	assert(pNode != &pList->dummy);//pNodeがダミーでないこと
-
-	return pNode->resultData;
+	return const_cast<ResultData&>(ConstIterator::operator*());
 }
 
 ResultData* DoublyLinkedList::Iterator::operator->()
 {
-	assert(pList != nullptr);//pListがnullptrでないこと
-	assert(pNode != &pList->dummy);//pNodeがダミーでないこと
-
-	return &pNode->resultData;
+	return const_cast<ResultData*>(ConstIterator::operator->());//ここではポインタの->は呼ばれていない
 }
