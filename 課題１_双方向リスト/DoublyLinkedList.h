@@ -85,13 +85,13 @@ public:
 		 * @param[in] int 移動回数
 		 * @return 移動したコンストイテレータ
 		 */
-		ConstIterator operator+(int n);
+		ConstIterator operator+(int n)const;
 		/**
 		 * @brief 先頭方向に指定した数だけ移動したコンストイテレータを返します
 		 * @param[in] int 移動回数
 		 * @return 移動したコンストイテレータ
 		 */
-		ConstIterator operator-(int n);
+		ConstIterator operator-(int n)const;
 
 		/**
 		 * @brief イテレータの示すノードが同じものか比較します
@@ -136,7 +136,7 @@ public:
 
 	/**
 	* @brief 双方向リストのイテレータ\n
-	*		 継承：コンストイテレータ
+	*		 継承：コンストイテレータ\n
 	*		 ＊演算子または->演算子でデータにアクセスできます
 	*/
 	class Iterator :public ConstIterator {

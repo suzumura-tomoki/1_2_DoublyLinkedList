@@ -4,9 +4,7 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 # Ignore files
-*.vcxproj
 *.filters
-*.sln
 
 # User-specific files
 *.rsuser

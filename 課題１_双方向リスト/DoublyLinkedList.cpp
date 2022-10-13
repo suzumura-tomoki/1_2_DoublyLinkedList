@@ -97,7 +97,7 @@ bool DoublyLinkedList::Delete(ConstIterator& iterator)
 
 	Node* pDeleteNode = iterator.pNode;
 
-	iterator.pNode = iterator.pNode->pNext;//次のノードへ移動
+	iterator++;//次のノードへ移動
 
 	//削除対象が先頭だったら先頭ポインタを更新
 	if (pDeleteNode == pTop)
@@ -131,11 +131,6 @@ DoublyLinkedList::ConstIterator DoublyLinkedList::GetConstEnd()const
 {
 	return ConstIterator(this, &dummy);
 }
-
-//DoublyLinkedList::Node* DoublyLinkedList::GetNode()
-//{
-//	return pTop;
-//}
 
 DoublyLinkedList::ConstIterator::ConstIterator()
 {
@@ -176,7 +171,7 @@ DoublyLinkedList::ConstIterator DoublyLinkedList::ConstIterator::operator++(int)
 	assert(this->pNode != &this->pList->dummy);//末尾ノードである
 
 	ConstIterator cit = *this;
-	pNode = pNode->pNext;
+	operator++();
 	return cit;
 }
 
@@ -193,11 +188,11 @@ DoublyLinkedList::ConstIterator DoublyLinkedList::ConstIterator::operator--(int)
 	assert(this->pList != nullptr);//リストの参照がない
 	assert(this->pNode->pPrevious != nullptr);//先頭ノードである　またはリストが空の時の末尾ノード
 	ConstIterator cit = *this;
-	pNode = pNode->pPrevious;
+	operator--();
 	return cit;
 }
 
-DoublyLinkedList::ConstIterator DoublyLinkedList::ConstIterator::operator+(int n)
+DoublyLinkedList::ConstIterator DoublyLinkedList::ConstIterator::operator+(int n)const
 {
 	assert(this->pList != nullptr);//リストの参照がない場合
 
@@ -228,7 +223,7 @@ DoublyLinkedList::ConstIterator DoublyLinkedList::ConstIterator::operator+(int n
 	}
 }
 
-DoublyLinkedList::ConstIterator DoublyLinkedList::ConstIterator::operator-(int n)
+DoublyLinkedList::ConstIterator DoublyLinkedList::ConstIterator::operator-(int n)const
 {
 	assert(this->pList != nullptr);//リストの参照がない場合
 
